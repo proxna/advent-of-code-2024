@@ -13,6 +13,8 @@ for (int i = 0; i < array1.Length; i++)
 {
     distance += Math.Abs(array1[i] - array2[i]);
 }
+
+// used string interpolation for better performance
 Console.WriteLine($"Distance: {distance}");
 
 // Calculate similarity
