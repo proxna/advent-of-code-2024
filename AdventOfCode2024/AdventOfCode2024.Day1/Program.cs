@@ -9,7 +9,16 @@ for (int i = 0; i < Math.Min(inputArrays.Item1.Length, inputArrays.Item2.Length)
     distance += Math.Abs(inputArrays.Item1[i] - inputArrays.Item2[i]);
 }
 
-Console.WriteLine(distance);
+Console.WriteLine("Distance: " + distance);
+
+int similarity = 0;
+
+for(int i = 0; i < inputArrays.Item1.Length; i++)
+{
+    similarity += inputArrays.Item1[i] * inputArrays.Item2.Where(x => x == inputArrays.Item1[i]).Count();
+}
+
+Console.WriteLine("Similarity: " + similarity);
 
 async Task<(int[], int[])> GetArraysFromInput()
 {
