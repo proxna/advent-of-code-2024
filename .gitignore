@@ -1,0 +1,7 @@
+﻿################################################################################
+# Ten plik .gitignore został utworzony automatycznie przez Microsoft(R) Visual Studio.
+################################################################################
+
+/AdventOfCode2024/.vs/AdventOfCode2024
+/AdventOfCode2024/*/bin/
+/AdventOfCode2024/*/obj
