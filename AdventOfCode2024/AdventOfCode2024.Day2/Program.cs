@@ -1,93 +1,67 @@
-﻿// See https://aka.ms/new-console-template for more information
-Console.WriteLine("Hello, World!");
+﻿Console.WriteLine("Hello, World!");
 
-int saveReports = 0;
-
-await foreach(List<int> level in GetLevelsLogsFromFile())
-{
-    if (!IsAscendingOrDescending(level))
-        continue;
-
-    if (!LevelChangeIsSafe(level.ToArray()))
-        continue;
-
-    saveReports++;
-}
-
+int saveReports = await CountValidReports();
 Console.WriteLine($"SaveReports: {saveReports}");
 
-int saveAdjustedReports = 0;
+int saveAdjustedReports = await CountValidAdjustedReports();
+Console.WriteLine($"SaveAdjustedReports: {saveAdjustedReports}");
 
-await foreach (List<int> level in GetLevelsLogsFromFile())
+async Task<int> CountValidReports()
 {
-    for (int i = 0; i < level.Count; i++)
+    int count = 0;
+
+    await foreach (var level in GetLevelsLogsFromFile())
     {
-        int[] array = RemoveElementFromArray(level.ToArray(), i);
-
-        if (!IsAscendingOrDescending(array.ToList()))
-            continue;
-
-        if (!LevelChangeIsSafe(array))
-            continue;
-
-        saveAdjustedReports++;
-        break;
+        if (IsAscendingOrDescending(level) && LevelChangeIsSafe(level.ToArray()))
+        {
+            count++;
+        }
     }
+
+    return count;
 }
 
-Console.WriteLine($"SaveAdjustedReports: {saveAdjustedReports}");
+async Task<int> CountValidAdjustedReports()
+{
+    int count = 0;
+
+    await foreach (var level in GetLevelsLogsFromFile())
+    {
+        for (int i = 0; i < level.Count; i++)
+        {
+            var adjustedLevel = level.Where((_, index) => index != i).ToArray();
+
+            if (IsAscendingOrDescending(adjustedLevel.ToList()) && LevelChangeIsSafe(adjustedLevel))
+            {
+                count++;
+                break;
+            }
+        }
+    }
+
+    return count;
+}
 
 async IAsyncEnumerable<List<int>> GetLevelsLogsFromFile()
 {
     string[] levels = await File.ReadAllLinesAsync("input.txt");
-    foreach (string level in levels)
+    foreach (var level in levels)
     {
-        yield return level.Split(' ', StringSplitOptions.RemoveEmptyEntries)
-            .Select(x => int.Parse(x)).ToList();
+        yield return level
+            .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+            .Select(int.Parse)
+            .ToList();
     }
 }
 
 bool IsAscendingOrDescending(List<int> levels)
 {
-    List<int> levelsAsc = levels.OrderBy(x => x).ToList();
-    List<int> levelsDesc = levels.OrderByDescending(x => x).ToList();
+    var levelsAsc = levels.OrderBy(x => x).ToList();
+    var levelsDesc = levels.OrderByDescending(x => x).ToList();
 
-    return GetDistanceBetweenLists(levels, levelsAsc) == 0
-        || GetDistanceBetweenLists(levels, levelsDesc) == 0;
+    return levels.SequenceEqual(levelsAsc) || levels.SequenceEqual(levelsDesc);
 }
 
-int[] RemoveElementFromArray(int[] array, int index)
-{
-    List<int> result = new();
-
-    for (int i = 0; i < array.Length; i++)
-    {
-        if (!i.Equals(index))
-        {
-            result.Add(array[i]);
-        }
-    }
-
-    return result.ToArray();
-}
-
-// if 0 then are equal
-int GetDistanceBetweenLists(List<int> levels, List<int> orderedLevels)
-{
-    if (levels.Count != orderedLevels.Count)
-        return -1;
-
-    int distance = 0;
-
-    for (int i = 0; i < levels.Count; i++)
-    {
-        distance += Math.Abs(levels[i] - orderedLevels[i]);
-    }
-
-    return distance;
-}
-
-// autoadjust defines if we can accept one wrong level
 bool LevelChangeIsSafe(int[] levels)
 {
     for (int i = 0; i < levels.Length - 1; i++)
