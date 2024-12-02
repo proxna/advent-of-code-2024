@@ -8,13 +8,34 @@ await foreach(List<int> level in GetLevelsLogsFromFile())
     if (!IsAscendingOrDescending(level))
         continue;
 
-    if (!LevelChangeIsSafe(level))
+    if (!LevelChangeIsSafe(level.ToArray()))
         continue;
 
     saveReports++;
 }
 
 Console.WriteLine($"SaveReports: {saveReports}");
+
+int saveAdjustedReports = 0;
+
+await foreach (List<int> level in GetLevelsLogsFromFile())
+{
+    for (int i = 0; i < level.Count; i++)
+    {
+        int[] array = RemoveElementFromArray(level.ToArray(), i);
+
+        if (!IsAscendingOrDescending(array.ToList()))
+            continue;
+
+        if (!LevelChangeIsSafe(array))
+            continue;
+
+        saveAdjustedReports++;
+        break;
+    }
+}
+
+Console.WriteLine($"SaveAdjustedReports: {saveAdjustedReports}");
 
 async IAsyncEnumerable<List<int>> GetLevelsLogsFromFile()
 {
@@ -35,6 +56,21 @@ bool IsAscendingOrDescending(List<int> levels)
         || GetDistanceBetweenLists(levels, levelsDesc) == 0;
 }
 
+int[] RemoveElementFromArray(int[] array, int index)
+{
+    List<int> result = new();
+
+    for (int i = 0; i < array.Length; i++)
+    {
+        if (!i.Equals(index))
+        {
+            result.Add(array[i]);
+        }
+    }
+
+    return result.ToArray();
+}
+
 // if 0 then are equal
 int GetDistanceBetweenLists(List<int> levels, List<int> orderedLevels)
 {
@@ -51,9 +87,10 @@ int GetDistanceBetweenLists(List<int> levels, List<int> orderedLevels)
     return distance;
 }
 
-bool LevelChangeIsSafe(List<int> levels)
+// autoadjust defines if we can accept one wrong level
+bool LevelChangeIsSafe(int[] levels)
 {
-    for (int i = 0; i < levels.Count - 1; i++)
+    for (int i = 0; i < levels.Length - 1; i++)
     {
         int change = Math.Abs(levels[i + 1] - levels[i]);
         if (change == 0 || change > 3)
