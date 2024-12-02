@@ -29,7 +29,8 @@ async Task<int> CountValidAdjustedReports()
     {
         for (int i = 0; i < level.Count; i++)
         {
-            // Tworzymy widok listy bez jednego elementu bez kopiowania
+            // brute-force of removing one element from list and checking report
+            // reports without need of adjusting still passes
             var adjustedLevel = level.Where((_, index) => index != i);
 
             if (IsAscendingOrDescendingOptimized(adjustedLevel) && LevelChangeIsSafe(adjustedLevel))
@@ -67,7 +68,7 @@ bool IsAscendingOrDescendingOptimized(IEnumerable<int> levels)
             if (current < previous) ascending = false;
             if (current > previous) descending = false;
 
-            // Jeśli oba są fałszywe, lista nie jest ani rosnąca, ani malejąca
+            // if both false then return false immidiately
             if (!ascending && !descending) return false;
         }
 
