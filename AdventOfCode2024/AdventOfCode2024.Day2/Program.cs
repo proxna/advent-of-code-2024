@@ -12,7 +12,7 @@ async Task<int> CountValidReports()
 
     await foreach (var level in GetLevelsLogsFromFile())
     {
-        if (IsAscendingOrDescending(level) && LevelChangeIsSafe(level.ToArray()))
+        if (IsAscendingOrDescendingOptimized(level) && LevelChangeIsSafe(level))
         {
             count++;
         }
@@ -29,9 +29,10 @@ async Task<int> CountValidAdjustedReports()
     {
         for (int i = 0; i < level.Count; i++)
         {
-            var adjustedLevel = level.Where((_, index) => index != i).ToArray();
+            // Tworzymy widok listy bez jednego elementu bez kopiowania
+            var adjustedLevel = level.Where((_, index) => index != i);
 
-            if (IsAscendingOrDescending(adjustedLevel.ToList()) && LevelChangeIsSafe(adjustedLevel))
+            if (IsAscendingOrDescendingOptimized(adjustedLevel) && LevelChangeIsSafe(adjustedLevel))
             {
                 count++;
                 break;
@@ -54,23 +55,43 @@ async IAsyncEnumerable<List<int>> GetLevelsLogsFromFile()
     }
 }
 
-bool IsAscendingOrDescending(List<int> levels)
+bool IsAscendingOrDescendingOptimized(IEnumerable<int> levels)
 {
-    var levelsAsc = levels.OrderBy(x => x).ToList();
-    var levelsDesc = levels.OrderByDescending(x => x).ToList();
+    bool ascending = true, descending = true;
 
-    return levels.SequenceEqual(levelsAsc) || levels.SequenceEqual(levelsDesc);
+    int? previous = null;
+    foreach (var current in levels)
+    {
+        if (previous.HasValue)
+        {
+            if (current < previous) ascending = false;
+            if (current > previous) descending = false;
+
+            // Jeśli oba są fałszywe, lista nie jest ani rosnąca, ani malejąca
+            if (!ascending && !descending) return false;
+        }
+
+        previous = current;
+    }
+
+    return true;
 }
 
-bool LevelChangeIsSafe(int[] levels)
+bool LevelChangeIsSafe(IEnumerable<int> levels)
 {
-    for (int i = 0; i < levels.Length - 1; i++)
+    int? previous = null;
+    foreach (var current in levels)
     {
-        int change = Math.Abs(levels[i + 1] - levels[i]);
-        if (change == 0 || change > 3)
+        if (previous.HasValue)
         {
-            return false;
+            int change = Math.Abs(current - previous.Value);
+            if (change == 0 || change > 3)
+            {
+                return false;
+            }
         }
+
+        previous = current;
     }
 
     return true;
