@@ -41,7 +41,7 @@ int xmasAmount = 0;
 
 foreach ((int x, int y) in filteredLocations)
 {
-    int[,] fragmentGrid = Extract7x7Subgrid(xmasMatrix, x, y);
+    int[,] fragmentGrid = ExtractSubgrid(xmasMatrix, x, y, 7);
 
     xmasAmount += ContainsSequence(fragmentGrid, [1, 2, 3, 4]);
 }
@@ -78,7 +78,7 @@ int x_masAmount = 0;
 
 foreach ((int x, int y) in ALocations)
 {
-    int[,] xmasFragment = Extract3x3Subgrid(matrixWithBorder, x + 3, y + 3);
+    int[,] xmasFragment = ExtractSubgrid(matrixWithBorder, x + 3, y + 3, 3);
     xmasFragment[0, 1] = 0;
     xmasFragment[1, 0] = 0;
     xmasFragment[2, 1] = 0;
@@ -96,6 +96,7 @@ foreach ((int x, int y) in ALocations)
 
 Console.WriteLine(x_masAmount);
 
+// filtering the localization where to lookup to matches
 List<(int x, int y)> FindAllValues(int[,] xmasMatrix, int value)
 {
     List<(int x, int y)> result = new();
@@ -111,6 +112,7 @@ List<(int x, int y)> FindAllValues(int[,] xmasMatrix, int value)
     return result;
 }
 
+//filtering first letters without any sequence
 bool HasANeighbor(int[,] xmasMatrix, int x, int y, int value)
 {
     for (int i = x - 1; i <= x + 1; i++)
@@ -192,53 +194,20 @@ static bool MatchesSequence(int[,] grid, int[] sequence, int startRow, int start
     return true;
 }
 
-int[,] Extract7x7Subgrid(int[,] largeGrid, int centerRow, int centerCol)
+int[,] ExtractSubgrid(int[,] largeGrid, int centerRow, int centerCol, int length)
 {
     int rows = largeGrid.GetLength(0);
     int cols = largeGrid.GetLength(1);
 
-    int[,] subgrid = new int[7, 7];
+    int[,] subgrid = new int[length, length];
 
     // Offset to define bounds of 7x7 grid
-    int startRow = centerRow - 3;
-    int startCol = centerCol - 3;
+    int startRow = centerRow - ((length - 1)/2);
+    int startCol = centerCol - ((length - 1)/2);
 
-    for (int i = 0; i < 7; i++)
+    for (int i = 0; i < length; i++)
     {
-        for (int j = 0; j < 7; j++)
-        {
-            int sourceRow = startRow + i;
-            int sourceCol = startCol + j;
-
-            // Fill subgrid with values from largeGrid or 0 if out of bounds
-            if (sourceRow >= 0 && sourceRow < rows && sourceCol >= 0 && sourceCol < cols)
-            {
-                subgrid[i, j] = largeGrid[sourceRow, sourceCol];
-            }
-            else
-            {
-                subgrid[i, j] = 0; // Default value for out-of-bounds elements
-            }
-        }
-    }
-
-    return subgrid;
-}
-
-int[,] Extract3x3Subgrid(int[,] largeGrid, int centerRow, int centerCol)
-{
-    int rows = largeGrid.GetLength(0);
-    int cols = largeGrid.GetLength(1);
-
-    int[,] subgrid = new int[3, 3];
-
-    // Offset to define bounds of 7x7 grid
-    int startRow = centerRow - 1;
-    int startCol = centerCol - 1;
-
-    for (int i = 0; i < 3; i++)
-    {
-        for (int j = 0; j < 3; j++)
+        for (int j = 0; j < length; j++)
         {
             int sourceRow = startRow + i;
             int sourceCol = startCol + j;
