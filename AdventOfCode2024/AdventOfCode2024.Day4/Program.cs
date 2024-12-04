@@ -22,21 +22,7 @@ for (int i = 0; i < lines.Length; i++)
     }
 }
 
-List<(int x, int y)> firstLetterLocations = FindFirstLetter(xmasMatrix);
-
-for (int i = 0; i < lines.Length; i++)
-{
-    for (int j = 0; j < charactersInLine; j++)
-    {
-        if (firstLetterLocations.Contains((i, j)))
-        {
-            Console.Write(xmasMatrix[i, j]);
-        }
-        Console.Write('.');
-    }
-
-    Console.WriteLine();
-}
+List<(int x, int y)> firstLetterLocations = FindAllValues(xmasMatrix, 1);
 
 var filteredLocations = firstLetterLocations.Where(tp => HasANeighbor(xmasMatrix, tp.x, tp.y, 2));
 
@@ -62,14 +48,62 @@ foreach ((int x, int y) in filteredLocations)
 
 Console.WriteLine(xmasAmount);
 
-List<(int x, int y)> FindFirstLetter(int[,] xmasMatrix)
+List<(int x, int y)> ALocations = FindAllValues(xmasMatrix, 3);
+
+List<int[,]> xmasSamples = new List<int[,]>()
+{
+    new int[3,3]{
+        { 2, 0, 2 },
+        { 0, 3, 0 },
+        { 4, 0, 4 }
+    },
+    new int[3,3]{
+        { 2, 0, 4 },
+        { 0, 3, 0 },
+        { 2, 0, 4 }
+    },
+    new int[3,3]{
+        { 4, 0, 4 },
+        { 0, 3, 0 },
+        { 2, 0, 2 }
+    },
+    new int[3,3]{
+        { 4, 0, 2 },
+        { 0, 3, 0 },
+        { 4, 0, 2 }
+    },
+};
+
+int x_masAmount = 0;
+
+foreach ((int x, int y) in ALocations)
+{
+    int[,] xmasFragment = Extract3x3Subgrid(matrixWithBorder, x + 3, y + 3);
+    xmasFragment[0, 1] = 0;
+    xmasFragment[1, 0] = 0;
+    xmasFragment[2, 1] = 0;
+    xmasFragment[1, 2] = 0;
+
+    foreach (int[,] sample in xmasSamples)
+    {
+        if (xmasFragment.Cast<int>().SequenceEqual(sample.Cast<int>()))
+        {
+            x_masAmount++;
+            break;
+        }
+    }
+}
+
+Console.WriteLine(x_masAmount);
+
+List<(int x, int y)> FindAllValues(int[,] xmasMatrix, int value)
 {
     List<(int x, int y)> result = new();
     for (int i = 0; i < xmasMatrix.GetLength(0); i++)
     {
         for (int j = 0; j < xmasMatrix.GetLength(1); j++)
         {
-            if (xmasMatrix[i, j] == 1)
+            if (xmasMatrix[i, j] == value)
                 result.Add((i, j));
         }
     }
@@ -172,6 +206,39 @@ int[,] Extract7x7Subgrid(int[,] largeGrid, int centerRow, int centerCol)
     for (int i = 0; i < 7; i++)
     {
         for (int j = 0; j < 7; j++)
+        {
+            int sourceRow = startRow + i;
+            int sourceCol = startCol + j;
+
+            // Fill subgrid with values from largeGrid or 0 if out of bounds
+            if (sourceRow >= 0 && sourceRow < rows && sourceCol >= 0 && sourceCol < cols)
+            {
+                subgrid[i, j] = largeGrid[sourceRow, sourceCol];
+            }
+            else
+            {
+                subgrid[i, j] = 0; // Default value for out-of-bounds elements
+            }
+        }
+    }
+
+    return subgrid;
+}
+
+int[,] Extract3x3Subgrid(int[,] largeGrid, int centerRow, int centerCol)
+{
+    int rows = largeGrid.GetLength(0);
+    int cols = largeGrid.GetLength(1);
+
+    int[,] subgrid = new int[3, 3];
+
+    // Offset to define bounds of 7x7 grid
+    int startRow = centerRow - 1;
+    int startCol = centerCol - 1;
+
+    for (int i = 0; i < 3; i++)
+    {
+        for (int j = 0; j < 3; j++)
         {
             int sourceRow = startRow + i;
             int sourceCol = startCol + j;
