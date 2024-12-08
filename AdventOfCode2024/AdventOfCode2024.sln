@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35122.118
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day1", "AdventOfCode2024.Day1\AdventOfCode2024.Day1.csproj", "{ECA40E3F-344A-43C5-BDE8-9CB02122ABED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode2024.Day1", "AdventOfCode2024.Day1\AdventOfCode2024.Day1.csproj", "{ECA40E3F-344A-43C5-BDE8-9CB02122ABED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day2", "AdventOfCode2024.Day2\AdventOfCode2024.Day2.csproj", "{6805E9A0-E0F6-4411-A114-88BB76B2CC18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode2024.Day2", "AdventOfCode2024.Day2\AdventOfCode2024.Day2.csproj", "{6805E9A0-E0F6-4411-A114-88BB76B2CC18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day3", "AdventOfCode.Day3\AdventOfCode2024.Day3.csproj", "{8C756E49-714B-43E8-BE4A-DC7FD2446FAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode2024.Day3", "AdventOfCode.Day3\AdventOfCode2024.Day3.csproj", "{8C756E49-714B-43E8-BE4A-DC7FD2446FAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day4", "AdventOfCode2024.Day4\AdventOfCode2024.Day4.csproj", "{3FFCF52A-BD02-443F-AB7F-1353798967FA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode2024.Day4", "AdventOfCode2024.Day4\AdventOfCode2024.Day4.csproj", "{3FFCF52A-BD02-443F-AB7F-1353798967FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day5", "AdventOfCode2024.Day5\AdventOfCode2024.Day5.csproj", "{BE25A504-7CDC-45E3-BBE4-770A958DABB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode2024.Day5", "AdventOfCode2024.Day5\AdventOfCode2024.Day5.csproj", "{BE25A504-7CDC-45E3-BBE4-770A958DABB2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day6", "AdventOfCode2024.Day6\AdventOfCode2024.Day6.csproj", "{334E2725-DED6-41E4-9721-E7D56EED9625}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode2024.Day6", "AdventOfCode2024.Day6\AdventOfCode2024.Day6.csproj", "{334E2725-DED6-41E4-9721-E7D56EED9625}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day7", "AdventOfCode2024.Day7\AdventOfCode2024.Day7.csproj", "{C4425930-98E3-4FC5-91F7-7DBFE4FC6F61}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdventOfCode2024.Day7", "AdventOfCode2024.Day7\AdventOfCode2024.Day7.csproj", "{C4425930-98E3-4FC5-91F7-7DBFE4FC6F61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdventOfCode2024.Day8", "AdventOfCode2024.Day8\AdventOfCode2024.Day8.csproj", "{90DFC40F-7307-49AA-AB55-9877376018F6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{C4425930-98E3-4FC5-91F7-7DBFE4FC6F61}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C4425930-98E3-4FC5-91F7-7DBFE4FC6F61}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C4425930-98E3-4FC5-91F7-7DBFE4FC6F61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90DFC40F-7307-49AA-AB55-9877376018F6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90DFC40F-7307-49AA-AB55-9877376018F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90DFC40F-7307-49AA-AB55-9877376018F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90DFC40F-7307-49AA-AB55-9877376018F6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
