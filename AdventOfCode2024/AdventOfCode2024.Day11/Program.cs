@@ -15,6 +15,7 @@ foreach (var stone in stones)
 
 Console.WriteLine(result);
 
+// it works slowly and for at most 45 blinks
 static List<long> Blink(List<long> stones)
 {
     List<long> result = new();
