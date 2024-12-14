@@ -7,7 +7,7 @@ Console.WriteLine("Hello, World!");
 
 (int x, int y) mapSize = (101, 103);
 (int x, int y) quadrantBorders = ((int)(mapSize.x / 2), (int)(mapSize.y / 2));
-int seconds = 10000;
+int seconds = 100;
 
 string[] lines = await File.ReadAllLinesAsync("input.txt");
 
@@ -24,14 +24,50 @@ for (int sek = 1; sek < seconds; sek++)
     {
         robot.Move(mapSize);
     }
+}
 
-    if(LargestGroup(robots) > 25)
+List<Quadrant> quadrants = new()
+{
+    new (0, 0, quadrantBorders.x - 1, quadrantBorders.y - 1),
+    new (quadrantBorders.x + 1, 0, mapSize.x - 1, quadrantBorders.y - 1),
+    new (0, quadrantBorders.y + 1, quadrantBorders.x - 1, mapSize.y - 1),
+    new (quadrantBorders.x + 1, quadrantBorders.y + 1, mapSize.x - 1, mapSize.y - 1)
+};
+
+int result = 1;
+
+foreach (Quadrant quadrant in quadrants)
+{
+    result *= quadrant.GetRobotsFromQuadrant(robots).ToList().Count;
+}
+
+Console.WriteLine(result);
+
+robots.Clear();
+
+foreach (string line in lines)
+{
+    robots.Add(RobotRegexGenerator.ReadRobotData(line));
+}
+
+int treeSec = 0;
+
+do
+{
+    treeSec++;
+    foreach (Robot robot in robots)
     {
-        Console.WriteLine("Printing map");
-        PrintRobots(robots, sek);
+        robot.Move(mapSize);
+    }
+
+    if (LargestGroup(robots) > 25)
+    {
+        Console.WriteLine($"Printing {treeSec} second");
+        PrintRobots(robots, treeSec);
         break;
     }
-}
+
+} while (true);
 
 int LargestGroup(List<Robot> robots)
 {
@@ -101,19 +137,4 @@ void PrintRobots(List<Robot> robots, int second)
     }
 }
 
-List<Quadrant> quadrants = new()
-{
-    new (0, 0, quadrantBorders.x - 1, quadrantBorders.y - 1),
-    new (quadrantBorders.x + 1, 0, mapSize.x - 1, quadrantBorders.y - 1),
-    new (0, quadrantBorders.y + 1, quadrantBorders.x - 1, mapSize.y - 1),
-    new (quadrantBorders.x + 1, quadrantBorders.y + 1, mapSize.x - 1, mapSize.y - 1)
-};
 
-int result = 1;
-
-foreach (Quadrant quadrant in quadrants)
-{
-    result *= quadrant.GetRobotsFromQuadrant(robots).ToList().Count;
-}
-
-Console.WriteLine(result);
